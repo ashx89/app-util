@@ -9,6 +9,7 @@
   "author": "Ashley J. Taylor",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.3.17",
     "config": "^1.21.0",
     "express-jwt": "^3.4.0",
     "jsonwebtoken": "^7.0.0"
