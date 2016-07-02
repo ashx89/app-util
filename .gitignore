@@ -1,3 +1,4 @@
+.nyc_output
 server.*
 config/*.json
 !config/example.json

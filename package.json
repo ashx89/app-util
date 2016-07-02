@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "SECRET=secret ./node_modules/.bin/tap --cov tests/*.js"
   },
   "author": "Ashley J. Taylor",
   "license": "ISC",
@@ -13,5 +13,10 @@
     "config": "^1.21.0",
     "express-jwt": "^3.4.0",
     "jsonwebtoken": "^7.0.0"
+  },
+  "devDependencies": {
+    "mock-aws": "^1.2.3",
+    "node-mocks-http": "^1.5.2",
+    "tap": "^6.1.1"
   }
 }
