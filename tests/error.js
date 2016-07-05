@@ -24,7 +24,7 @@ var res = new Response();
 var next = function onNext() {};
 
 tap.test('Check the mulitple error messages', function onError(t) {
-	t.plan(7);
+	t.plan(8);
 
 	var result;
 
@@ -82,5 +82,14 @@ tap.test('Check the mulitple error messages', function onError(t) {
 
 	t.equal(result.getJson.title, 'Validation Error', 'error message correct');
 
-	t.end();
+	/**
+	 * No Error set
+	 */
+	var uncapturedError = {};
+	uncapturedError.code = 100;
+	uncapturedError.title = 'no name set for error';
+	error(uncapturedError, req, res, function(err) {
+		t.equal(err.code, 100, 'unhandled error is returned back');
+		t.end();
+	});
 });

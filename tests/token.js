@@ -2,14 +2,17 @@ var tap = require('tap');
 var httpMock = require('node-mocks-http');
 
 var token = require('../index').token;
-var config = [
-	'/path/token/free'
-];
+var config = ['/path/token/free'];
 
 var req = httpMock.createRequest({
 	method: 'GET',
+	headers: {},
+	query: {},
+	path: '/path/token/free',
 	cookies: { token: 'this-is-a-token', user: 'this-is-a-user-token' }
 });
+
+var res = httpMock.createResponse();
 
 tap.test('Check token object methods', function onToken(t) {
 	/**
@@ -37,15 +40,37 @@ tap.test('Check token object methods', function onToken(t) {
 	/**
 	 * Get the user token
 	 */
+	req.headers.authorization = 'Bearer this-is-a-user-token';
+	t.equal(token.fetch(req), 'this-is-a-user-token', 'bearer token fetchable');
+	req.headers.authorization = null;
+
+	req.query.token = 'this-is-a-user-token';
+	t.equal(token.fetch(req), 'this-is-a-user-token', 'query token fetchable');
+	req.query.token = null;
+
 	var userToken = token.fetch(req);
-	t.equal(userToken, 'this-is-a-user-token', 'the user token is fetchable');
+	t.equal(token.fetch(req), 'this-is-a-user-token', 'cookie token fetchable');
+	req.cookies.user = null;
+	t.equal(token.fetch(req), null, 'no token set');
 
 	/**
-	 * Check for token middleware function
+	 * Check if config have been set
 	 */
 	token.setConfig(config);
-	var middlewareToken = token.require(req);
-	t.equal(typeof middlewareToken, 'function', 'can use token as middleware');
+	t.equal(token.config, config, 'token configuration has been set');
 
-	t.end();
+	/**
+	 * Check if middleware is available
+	 */
+	var tokenMiddleware = token.require();
+	t.equal(typeof tokenMiddleware, 'function', 'token middleware exists');
+
+	/**
+	 * Verify token
+	 */
+	req.cookies.user = createToken; // set cookie to a jwt string
+	token.verify(req, res, function onNext(err) {
+		t.equal(req.decoded.token, 'new-token', 'middleware verification correct');
+		t.end();
+	});
 });

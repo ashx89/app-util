@@ -139,3 +139,17 @@ tap.test('s3 should upload an object', function onUploadTest(t) {
 		t.end();
 	});
 });
+
+tap.test('s3 should decrypt an object', function onDecryptTest(t) {
+	t.plan(2);
+
+	mockAws.mock('KMS', 'decrypt', function onDecryptObject(params, callback) {
+		callback(null, { Plaintext: 'decrypted-string' });
+	});
+
+	s3.decrypt('file/to/decrypt.txt', 'file-to-upload', function onDecrypt(err, result) {
+		t.equal(result, 'decrypted-string', 'file decrypted');
+		t.equal(typeof result, 'string', 'file decrypted is a string');
+		t.end();
+	});
+});
