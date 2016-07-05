@@ -88,8 +88,8 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	var uncapturedError = {};
 	uncapturedError.code = 100;
 	uncapturedError.title = 'no name set for error';
-	error(uncapturedError, req, res, function(err) {
-		t.equal(err.code, 100, 'unhandled error is returned back');
-		t.end();
-	});
+	result = error(uncapturedError, req, res, next());
+
+	t.equal(result.getJson.message, 'Invalid Request', 'unhandled error is given defaults');
+	t.end();
 });
