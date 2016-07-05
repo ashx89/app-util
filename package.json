@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "SECRET=secret ./node_modules/.bin/tap --cov tests/*.js"
+    "test": "SECRET=secret COVERALLS_REPO_TOKEN=NRFulVgoAf5flaH0c48FoihjuGhzKkYb5 ./node_modules/.bin/tap --cov tests/*.js"
   },
   "author": "Ashley J. Taylor",
   "license": "ISC",
