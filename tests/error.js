@@ -7,6 +7,9 @@ var req = httpMock.createRequest({
 	method: 'GET'
 });
 
+/**
+ * Allows for: res.status(200).json({})
+ */
 var Response = function onResponse() {};
 
 Response.prototype.status = function onSetStatus(status) {

@@ -48,7 +48,6 @@ tap.test('Check token object methods', function onToken(t) {
 	t.equal(token.fetch(req), 'this-is-a-user-token', 'query token fetchable');
 	req.query.token = null;
 
-	var userToken = token.fetch(req);
 	t.equal(token.fetch(req), 'this-is-a-user-token', 'cookie token fetchable');
 	req.cookies.user = null;
 	t.equal(token.fetch(req), null, 'no token set');
@@ -69,7 +68,7 @@ tap.test('Check token object methods', function onToken(t) {
 	 * Verify token
 	 */
 	req.cookies.user = createToken; // set cookie to a jwt string
-	token.verify(req, res, function onNext(err) {
+	token.verify(req, res, function onNext() {
 		t.equal(req.decoded.token, 'new-token', 'middleware verification correct');
 		t.end();
 	});

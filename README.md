@@ -1,4 +1,4 @@
-# Application: Util
+# Application Util
 [![Build Status](https://travis-ci.org/ashx89/app-util.svg?branch=master)](https://travis-ci.org/ashx89/app-util) [![Coverage Status](https://coveralls.io/repos/github/ashx89/app-util/badge.svg?branch=master)](https://coveralls.io/github/ashx89/app-util?branch=master)
 ---
 
