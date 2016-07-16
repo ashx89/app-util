@@ -1,7 +1,7 @@
 var tap = require('tap');
 var httpMock = require('node-mocks-http');
 
-var error = require('../index').error;
+var applicationError = require('../index').applicationError;
 
 var req = httpMock.createRequest({
 	method: 'GET'
@@ -35,7 +35,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	 * Base Error
 	 */
 	var baseError = new Error('This is an error');
-	result = error(baseError, req, res, next());
+	result = applicationError(baseError, req, res, next());
 	t.equal(baseError.name, 'Error', 'default error is an error object');
 	t.equal(result.getJson.title, 'Bad Request', 'default error message correct');
 
@@ -44,7 +44,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	 */
 	var unauthorizedError = new Error('This is an unauthorized error');
 	unauthorizedError.name = 'UnauthorizedError';
-	result = error(unauthorizedError, req, res, next());
+	result = applicationError(unauthorizedError, req, res, next());
 
 	t.equal(result.getJson.title, 'Unauthorized', 'error message correct');
 
@@ -53,7 +53,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	 */
 	var jsonWebTokenError = new Error('This is a jsonwebtoken error');
 	jsonWebTokenError.name = 'JsonWebTokenError';
-	result = error(jsonWebTokenError, req, res, next());
+	result = applicationError(jsonWebTokenError, req, res, next());
 
 	t.equal(result.getJson.title, 'Access Token Error', 'error message correct');
 
@@ -62,7 +62,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	 */
 	var badCsrfTokenError = new Error('This is a bad csrf token error');
 	badCsrfTokenError.name = 'EBADCSRFTOKEN';
-	result = error(badCsrfTokenError, req, res, next());
+	result = applicationError(badCsrfTokenError, req, res, next());
 
 	t.equal(result.getJson.title, 'Forbidden', 'error message correct');
 
@@ -71,7 +71,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	 */
 	var tokenExpiredError = new Error('This is an expired token error');
 	tokenExpiredError.name = 'TokenExpiredError';
-	result = error(tokenExpiredError, req, res, next());
+	result = applicationError(tokenExpiredError, req, res, next());
 
 	t.equal(result.getJson.title, 'Access Token Error', 'error message correct');
 
@@ -81,7 +81,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	var validationError = new Error('This is a validation error');
 	validationError.name = 'ValidationError';
 	validationError.errors = [{ message: 'This is a test error' }];
-	result = error(validationError, req, res, next());
+	result = applicationError(validationError, req, res, next());
 
 	t.equal(result.getJson.title, 'Validation Error', 'error message correct');
 
@@ -91,7 +91,7 @@ tap.test('Check the mulitple error messages', function onError(t) {
 	var uncapturedError = {};
 	uncapturedError.code = 100;
 	uncapturedError.title = 'no name set for error';
-	result = error(uncapturedError, req, res, next());
+	result = applicationError(uncapturedError, req, res, next());
 
 	t.equal(result.getJson.message, 'Invalid Request', 'unhandled error is given defaults');
 	t.end();
